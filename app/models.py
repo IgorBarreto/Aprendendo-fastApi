@@ -14,3 +14,13 @@ class Post(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), server_default=text("now()"), nullable=False
     )
+
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, nullable=False, primary_key=True)
+    email = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), server_default=text("now()"), nullable=False
+    )
