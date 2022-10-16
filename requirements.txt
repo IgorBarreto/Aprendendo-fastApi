@@ -1,3 +1,5 @@
 fastapi[all]
 psycopg2-binary
 SQLAlchemy
+passlib[bcrypt]
+python-jose[pycryptodome]
