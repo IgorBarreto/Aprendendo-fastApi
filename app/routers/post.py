@@ -22,8 +22,7 @@ async def create_post(
     db: Session = Depends(get_db),
     current_user: UserSchema = Depends(get_current_user),
 ):
-    new_post = PostModel(**post.dict())
-    post.dict()
+    new_post = PostModel(owner_id=current_user.id, **post.dict())
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
@@ -47,12 +46,16 @@ def delete_post(
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_user),
 ):
-    post = db.query(PostModel).filter(PostModel.id == id)
-    print(post)
-    if not post.first():
+    post = db.query(PostModel).filter(PostModel.id == id).first()
+    if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post does not exists",
+        )
+    if not (post.owner_id == current_user.id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"You don't have permission",
         )
     post.delete()
     db.commit()
@@ -66,13 +69,17 @@ def update_post(
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_user),
 ):
-    post_query = db.query(PostModel).filter(PostModel.id == id)
-    post = post_query.first()
+    post = db.query(PostModel).filter(PostModel.id == id).first()
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post does not exists",
         )
-    post_query.update(updated_post.dict(), synchronize_session=False)
+    if not (post.owner_id == current_user.id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"You don't have permission",
+        )
+    post.update(updated_post.dict(), synchronize_session=False)
     db.commit()
-    return post_query.first()
+    return post.first()
