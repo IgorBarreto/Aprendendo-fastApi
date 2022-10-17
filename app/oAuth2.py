@@ -7,12 +7,13 @@ from app.schemas import TokenData as TokenDataSchema, User as UserSchema
 from app.database import get_db
 from app.models import User as UserModel
 
+from .config import settings
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="login")
 
-SECRET_KEY = "c82d1b07d7f2b4f5bb18e4ede23b1347f863e748"
-ALGORITHM = "HS256"
-ACESS_TOKEN_EXPIRE_DAYS = 1
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACESS_TOKEN_EXPIRE_DAYS = settings.ACESS_TOKEN_EXPIRE_DAYS
 
 
 def create_acess_token(data: dict):

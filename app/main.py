@@ -1,24 +1,23 @@
-from random import randrange
 from typing import List
 from fastapi import FastAPI, APIRouter
 from app.database import engine
-from app import models
-from app.routers import post, user, auth
-
+from app.models import Base
+from app.routers import post, user, auth, vote
+from pydantic import BaseSettings
 
 # Drop tables
-if True:
-    models.Base.metadata.drop_all(bind=engine)
+if False:
+    Base.metadata.drop_all(bind=engine)
 # Create all models of file models.py that not present in database
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
+
+routers: List[APIRouter] = [auth, user, post, vote]
+for route in routers:
+    app.include_router(route.router)
 
 
 @app.get("/")
 async def root():
     return {"message": "Welcome to my API"}
-
-
-routers: List[APIRouter] = [auth, user, post]
-for route in routers:
-    app.include_router(route.router)
