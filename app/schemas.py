@@ -1,4 +1,3 @@
-from asyncio import streams
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
@@ -10,18 +9,12 @@ class PostBase(BaseModel):
     content: str
     published: bool = True
 
+    class Config:
+        orm_mode = True
+
 
 class PostCreate(PostBase):
     ...
-
-
-class Post(PostBase):
-    id: int
-    created_at: datetime
-    owner_id: int
-
-    class Config:
-        orm_mode = True
 
 
 class UserBase(BaseModel):
@@ -34,6 +27,7 @@ class UserCreeate(UserBase):
 
 class User(UserBase):
     id: int
+    email: EmailStr
     created_at: datetime
 
     class Config:
@@ -57,3 +51,21 @@ class TokenData(BaseModel):
 class Vote(BaseModel):
     post_id: int
     dir: conint(le=1)
+
+
+class Post(PostBase):
+    id: int
+    created_at: datetime
+    owner_id: int
+    owner: User
+
+    class Config:
+        orm_mode = True
+
+
+class PostOUt(BaseModel):
+    Post: Post
+    votes: int
+
+    class Config:
+        orm_mode = True

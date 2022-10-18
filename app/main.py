@@ -9,7 +9,7 @@ from pydantic import BaseSettings
 if False:
     Base.metadata.drop_all(bind=engine)
 # Create all models of file models.py that not present in database
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
