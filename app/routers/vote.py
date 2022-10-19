@@ -16,7 +16,7 @@ def vote(
     db: Session = Depends(get_db),
     current_user: userSchema = Depends(get_current_user),
 ):
-    post = db.query(voteModel).filter(voteModel.post_id == postModel.id).first()
+    post = db.query(postModel).filter(postModel.id == vote.post_id).first()
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Post does not exist"
