@@ -14,13 +14,13 @@ from pydantic import BaseSettings
 
 app = FastAPI()
 
-origins = []
-app.middleware(
+origins = ["*"]
+app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credetials=True,
+    allow_credentials=True,
     allow_methods=["*"],
-    allow_haders=["*"],
+    allow_headers=["*"],
 )
 
 routers: List[APIRouter] = [auth, user, post, vote]
