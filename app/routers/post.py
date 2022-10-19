@@ -40,7 +40,6 @@ async def get_posts(
         .limit(limit)
         .offset(skip)
         .all()
-        .remove
     )
 
     return posts
