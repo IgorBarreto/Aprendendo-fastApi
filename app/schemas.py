@@ -27,7 +27,6 @@ class UserCreeate(UserBase):
 
 class User(UserBase):
     id: int
-    email: EmailStr
     created_at: datetime
 
     class Config:
