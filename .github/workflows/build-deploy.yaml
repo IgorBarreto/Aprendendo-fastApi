@@ -9,7 +9,7 @@ jobs:
     env:
       #configure Actions secrets -  Settings> secretes> Actiions
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
-      DATABASE_PORT: ${{DATABASE_PORT}}
+      DATABASE_PORT: 5432 #${{secrets.DATABASE_PORT}}
       DATABASE_NAME: FastAPI
       DATABASE_USER: postgres
       DATABASE_PASSWOR: postgres
@@ -17,6 +17,20 @@ jobs:
       SECRET_KEY: c82d1b07d7f2b4f5bb18e4ede23b1347f863e748
       ALGORITHM: HS256
       ACESS_TOKEN_EXPIRE_DAYS: 1
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: FastAPI
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     runs-on: ubuntu-latest
     steps:
