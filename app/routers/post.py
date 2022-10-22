@@ -79,9 +79,10 @@ def get_post(id: int, db: Session = Depends(get_db)):
 def delete_post(
     id: int,
     db: Session = Depends(get_db),
-    current_user: int = Depends(get_current_user),
+    current_user: UserSchema = Depends(get_current_user),
 ):
-    post = db.query(postModel).filter(postModel.id == id).first()
+    post_query = db.query(postModel).filter(postModel.id == id)
+    post = post_query.first()
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
