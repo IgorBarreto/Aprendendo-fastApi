@@ -4,9 +4,12 @@ on: ["pull_request", "push"]
 
 jobs:
   job1:
+    environment:
+      name: testing
     env:
-      DATABASE_HOSTNAME: localhost
-      DATABASE_PORT: 5432
+      #configure Actions secrets -  Settings> secretes> Actiions
+      DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
+      DATABASE_PORT: ${{ DATABASE_PORT }}
       DATABASE_NAME: FastAPI
       DATABASE_USER: postgres
       DATABASE_PASSWOR: postgres
