@@ -1,0 +1,32 @@
+name: Build and deploy Code
+
+on: ["pull_request", "push"]
+
+jobs:
+  job1:
+    env:
+      DATABASE_HOSTNAME: localhost
+      DATABASE_PORT: 5432
+      DATABASE_NAME: FastAPI
+      DATABASE_USER: postgres
+      DATABASE_PASSWOR: postgres
+      DATABASE_DRIVER: postgresql
+      SECRET_KEY: c82d1b07d7f2b4f5bb18e4ede23b1347f863e748
+      ALGORITHM: HS256
+      ACESS_TOKEN_EXPIRE_DAYS: 1
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: pulling git repo
+        uses: actions/checkout@v2
+      - name: sudo apt install python version 3.10.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: update pip
+        run: python -m pip install --upgrade pip
+      - name: install all dependencies
+        run: pip install -r requirements.txt
+      - name: tests with pytes
+        run: pip install pytest
+          pytest -v
